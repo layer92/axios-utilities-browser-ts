@@ -25,7 +25,7 @@
     "@layer92/core": "git+https://github.com/layer92/core-ts.git",
     "@types/axios": "0.14.0",
     "@types/node": "20.8.6",
-    "axios": "^1.1.0",
+    "axios": "1.1.0",
     "typescript": "5.2.2"
   }
 }
