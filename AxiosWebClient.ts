@@ -16,17 +16,21 @@ type RequestArgumentsBeyondMethod = {
 export class AxiosWebClient{
 
     constructor(private _needs:{
-        baseUrlBox?: UrlEndingInSlashBox;
+        baseUrl?: string;
         customMethodImplementation?:"AppendWithColonThenPost",
-        initialAuthenticationHeaderBox?:AuthenticationHeaderBox,
+        initialAuthenticationHeader?:string,
         onSetAuthenticationHeaderBoxAsync?:(maybeHeaderBox:AuthenticationHeaderBox|undefined)=>void|Promise<void>,
     }){
-        if(this._needs.initialAuthenticationHeaderBox){
-            this.setAuthenticationHeaderBox(this._needs.initialAuthenticationHeaderBox)
+        if(this._needs.baseUrl){
+            new UrlEndingInSlashBox(this._needs.baseUrl);
+        }
+        if(this._needs.initialAuthenticationHeader){
+            new AuthenticationHeaderBox(this._needs.initialAuthenticationHeader);
+            this.setAuthenticationHeader(this._needs.initialAuthenticationHeader)
         }
     }
     readonly _axios = Axios.create({
-        baseURL:this._needs.baseUrlBox?.getData()
+        baseURL:this._needs.baseUrl
     });
 
 
@@ -96,7 +100,7 @@ export class AxiosWebClient{
         }catch(axiosError:any){
             if( axiosError.response && axiosError.response.status){
                 const {status:statusCode,statusText,data:responseBodyData} = axiosError.response;
-                const path = (this._needs.baseUrlBox?.getData()||"")+pathOnHost;
+                const path = (this._needs.baseUrl||"")+pathOnHost;
                 onHttpError?.(statusCode,statusText,responseBodyData);
                 throw new Error("AxiosWebClient: AxiosError:\n"+JSON.stringify({path,method,statusCode,statusText,responseBodyData},null,4));
             }
@@ -202,7 +206,7 @@ export class AxiosWebClient{
     setBasicCredentialsString(basicCredentials:string){
         this.setBasicCredentialsStringBox(new BasicCredentialsStringBox(basicCredentials));
     }
-    setBasicCredentialsStringBox(credentialsStringBox:BasicCredentialsStringBox){
+    private setBasicCredentialsStringBox(credentialsStringBox:BasicCredentialsStringBox){
         const header = credentialsStringBox.toBasicAuthorizationHeader();
         this.setAuthenticationHeaderBox(header);
     }
@@ -213,7 +217,7 @@ export class AxiosWebClient{
     setAuthenticationHeader(header:string){
         this.setAuthenticationHeaderBox(new AuthenticationHeaderBox(header));
     }
-    setAuthenticationHeaderBox(headerBox:AuthenticationHeaderBox){
+    private setAuthenticationHeaderBox(headerBox:AuthenticationHeaderBox){
         this._axios.defaults.headers.Authorization = headerBox.getData();
         this._needs.onSetAuthenticationHeaderBoxAsync?.(headerBox);
     }
