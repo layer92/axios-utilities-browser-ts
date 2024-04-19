@@ -19,7 +19,7 @@ export class AxiosWebClient{
         baseUrl?: string;
         customMethodImplementation?:"AppendWithColonThenPost",
         initialAuthenticationHeader?:string,
-        onSetAuthenticationHeaderBoxAsync?:(maybeHeaderBox:AuthenticationHeaderBox|undefined)=>void|Promise<void>,
+        onSetAuthenticationHeaderAsync?:(maybeHeader:string|undefined)=>void|Promise<void>,
     }){
         if(this._needs.baseUrl){
             new UrlEndingInSlashBox(this._needs.baseUrl);
@@ -219,12 +219,12 @@ export class AxiosWebClient{
     }
     private setAuthenticationHeaderBox(headerBox:AuthenticationHeaderBox){
         this._axios.defaults.headers.Authorization = headerBox.getData();
-        this._needs.onSetAuthenticationHeaderBoxAsync?.(headerBox);
+        this._needs.onSetAuthenticationHeaderAsync?.(headerBox.getData());
     }
 
     clearAuthenticationCredentials(){
         delete this._axios.defaults.headers.Authorization;
-        this._needs.onSetAuthenticationHeaderBoxAsync?.(undefined);
+        this._needs.onSetAuthenticationHeaderAsync?.(undefined);
     }
 
     hasAuthenticationCredentials(){
