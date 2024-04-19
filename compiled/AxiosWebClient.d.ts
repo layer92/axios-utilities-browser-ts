@@ -1,4 +1,3 @@
-import { AuthenticationHeaderBox, BasicCredentialsStringBox, UrlEndingInSlashBox } from "@layer92/core";
 export type OnAxiosHttpError = (statusCode: number, statusText: string, responseBodyData: any) => (void | Promise<void>);
 type RequestArgumentsBeyondMethod = {
     pathOnHost: string;
@@ -12,10 +11,10 @@ type RequestArgumentsBeyondMethod = {
 export declare class AxiosWebClient {
     private _needs;
     constructor(_needs: {
-        baseUrlBox?: UrlEndingInSlashBox;
+        baseUrl?: string;
         customMethodImplementation?: "AppendWithColonThenPost";
-        initialAuthenticationHeaderBox?: AuthenticationHeaderBox;
-        onSetAuthenticationHeaderBoxAsync?: (maybeHeaderBox: AuthenticationHeaderBox | undefined) => void | Promise<void>;
+        initialAuthenticationHeader?: string;
+        onSetAuthenticationHeaderAsync?: (maybeHeader: string | undefined) => void | Promise<void>;
     });
     readonly _axios: import("axios").AxiosInstance;
     /**
@@ -74,12 +73,12 @@ export declare class AxiosWebClient {
      * @param basicCredentials a string in the form username:password
      */
     setBasicCredentialsString(basicCredentials: string): void;
-    setBasicCredentialsStringBox(credentialsStringBox: BasicCredentialsStringBox): void;
+    private setBasicCredentialsStringBox;
     /**
      * @param header A string in the form "Type value", eg "Basic username:password" or "Bearer foo". Despite going into the "Authorization" header of an HTTP request, this header is actually used for authentication, so that's what we're calling it.
      */
     setAuthenticationHeader(header: string): void;
-    setAuthenticationHeaderBox(headerBox: AuthenticationHeaderBox): void;
+    private setAuthenticationHeaderBox;
     clearAuthenticationCredentials(): void;
     hasAuthenticationCredentials(): boolean;
 }

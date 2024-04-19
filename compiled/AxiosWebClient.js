@@ -8,10 +8,14 @@ class AxiosWebClient {
     constructor(_needs) {
         this._needs = _needs;
         this._axios = axios_1.default.create({
-            baseURL: this._needs.baseUrlBox?.getData()
+            baseURL: this._needs.baseUrl
         });
-        if (this._needs.initialAuthenticationHeaderBox) {
-            this.setAuthenticationHeaderBox(this._needs.initialAuthenticationHeaderBox);
+        if (this._needs.baseUrl) {
+            new core_1.UrlEndingInSlashBox(this._needs.baseUrl);
+        }
+        if (this._needs.initialAuthenticationHeader) {
+            new core_1.AuthenticationHeaderBox(this._needs.initialAuthenticationHeader);
+            this.setAuthenticationHeader(this._needs.initialAuthenticationHeader);
         }
     }
     /**
@@ -73,7 +77,7 @@ class AxiosWebClient {
         catch (axiosError) {
             if (axiosError.response && axiosError.response.status) {
                 const { status: statusCode, statusText, data: responseBodyData } = axiosError.response;
-                const path = (this._needs.baseUrlBox?.getData() || "") + pathOnHost;
+                const path = (this._needs.baseUrl || "") + pathOnHost;
                 onHttpError?.(statusCode, statusText, responseBodyData);
                 throw new Error("AxiosWebClient: AxiosError:\n" + JSON.stringify({ path, method, statusCode, statusText, responseBodyData }, null, 4));
             }
@@ -188,11 +192,11 @@ class AxiosWebClient {
     }
     setAuthenticationHeaderBox(headerBox) {
         this._axios.defaults.headers.Authorization = headerBox.getData();
-        this._needs.onSetAuthenticationHeaderBoxAsync?.(headerBox);
+        this._needs.onSetAuthenticationHeaderAsync?.(headerBox.getData());
     }
     clearAuthenticationCredentials() {
         delete this._axios.defaults.headers.Authorization;
-        this._needs.onSetAuthenticationHeaderBoxAsync?.(undefined);
+        this._needs.onSetAuthenticationHeaderAsync?.(undefined);
     }
     hasAuthenticationCredentials() {
         return !!this._axios.defaults.headers.Authorization;
