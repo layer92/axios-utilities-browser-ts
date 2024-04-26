@@ -166,6 +166,9 @@ class AxiosWebClient {
         this.setAuthenticationHeaderBox(header);
     }
     maybeGetBearerToken() {
+        if (!this._axios.defaults.headers.Authorization) {
+            return undefined;
+        }
         const authorizationHeader = "" + this._axios.defaults.headers.Authorization;
         if (!authorizationHeader) {
             return undefined;
