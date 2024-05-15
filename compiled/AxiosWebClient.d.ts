@@ -1,3 +1,4 @@
+import { AxiosInstance } from "axios";
 export type OnAxiosHttpError = (statusCode: number, statusText: string, responseBodyData: any) => (void | Promise<void>);
 type RequestArgumentsBeyondMethod = {
     pathOnHost: string;
@@ -10,13 +11,13 @@ type RequestArgumentsBeyondMethod = {
 };
 export declare class AxiosWebClient {
     private _needs;
+    readonly _axios: AxiosInstance;
     constructor(_needs: {
         baseUrl?: string;
         customMethodImplementation?: "AppendWithColonThenPost";
         initialAuthenticationHeader?: string;
         onSetAuthenticationHeaderAsync?: (maybeHeader: string | undefined) => void | Promise<void>;
     });
-    readonly _axios: import("axios").AxiosInstance;
     /**
      * @returns the body data of the request
      *

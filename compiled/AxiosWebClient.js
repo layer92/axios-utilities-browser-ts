@@ -7,9 +7,6 @@ const core_2 = require("@layer92/core");
 class AxiosWebClient {
     constructor(_needs) {
         this._needs = _needs;
-        this._axios = axios_1.default.create({
-            baseURL: this._needs.baseUrl
-        });
         if (this._needs.baseUrl) {
             new core_1.UrlEndingInSlashBox(this._needs.baseUrl);
         }
@@ -17,6 +14,9 @@ class AxiosWebClient {
             new core_1.AuthenticationHeaderBox(this._needs.initialAuthenticationHeader);
             this.setAuthenticationHeader(this._needs.initialAuthenticationHeader);
         }
+        this._axios = axios_1.default.create({
+            baseURL: this._needs.baseUrl
+        });
     }
     /**
      * @returns the body data of the request

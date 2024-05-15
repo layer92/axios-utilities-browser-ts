@@ -1,4 +1,4 @@
-import Axios from "axios";
+import Axios, { AxiosInstance } from "axios";
 import { AllHttpMethodsLowercase, AuthenticationHeaderBox, BasicCredentialsStringBox, UrlEndingInSlashBox } from "@layer92/core";
 import { Expect } from "@layer92/core";
 export type OnAxiosHttpError = (statusCode:number,statusText:string,responseBodyData:any)=>(void|Promise<void>);
@@ -15,6 +15,7 @@ type RequestArgumentsBeyondMethod = {
 
 export class AxiosWebClient{
 
+    readonly _axios:AxiosInstance;
     constructor(private _needs:{
         baseUrl?: string;
         customMethodImplementation?:"AppendWithColonThenPost",
@@ -28,11 +29,10 @@ export class AxiosWebClient{
             new AuthenticationHeaderBox(this._needs.initialAuthenticationHeader);
             this.setAuthenticationHeader(this._needs.initialAuthenticationHeader)
         }
+        this._axios = Axios.create({
+            baseURL:this._needs.baseUrl
+        });
     }
-    readonly _axios = Axios.create({
-        baseURL:this._needs.baseUrl
-    });
-
 
     /**
      * @returns the body data of the request
