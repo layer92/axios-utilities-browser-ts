@@ -8,10 +8,10 @@ class AxiosWebClient {
     constructor(_needs) {
         this._needs = _needs;
         if (this._needs.baseUrl) {
-            new core_1.UrlEndingInSlashBox(this._needs.baseUrl);
+            (0, core_1.ExpectUrlEndingInSlash)(this._needs.baseUrl);
         }
         if (this._needs.initialAuthenticationHeader) {
-            new core_1.AuthenticationHeaderBox(this._needs.initialAuthenticationHeader);
+            (0, core_1.ExpectAuthenticationHeader)(this._needs.initialAuthenticationHeader);
             this.setAuthenticationHeader(this._needs.initialAuthenticationHeader);
         }
         this._axios = axios_1.default.create({
@@ -162,8 +162,8 @@ class AxiosWebClient {
         });
     }
     setBearerToken(token) {
-        const header = new core_1.AuthenticationHeaderBox("Bearer " + token);
-        this.setAuthenticationHeaderBox(header);
+        const header = ("Bearer " + token);
+        this.setAuthenticationHeader(header);
     }
     maybeGetBearerToken() {
         if (!this._axios.defaults.headers.Authorization) {
@@ -181,21 +181,17 @@ class AxiosWebClient {
      * @param basicCredentials a string in the form username:password
      */
     setBasicCredentialsString(basicCredentials) {
-        this.setBasicCredentialsStringBox(new core_1.BasicCredentialsStringBox(basicCredentials));
-    }
-    setBasicCredentialsStringBox(credentialsStringBox) {
-        const header = credentialsStringBox.toBasicAuthorizationHeader();
-        this.setAuthenticationHeaderBox(header);
+        (0, core_1.ExpectBasicCredentialsString)(basicCredentials);
+        const header = (0, core_1.BasicCredentialsStringToAuthenticationHeader)(basicCredentials);
+        this.setAuthenticationHeader(header);
     }
     /**
      * @param header A string in the form "Type value", eg "Basic username:password" or "Bearer foo". Despite going into the "Authorization" header of an HTTP request, this header is actually used for authentication, so that's what we're calling it.
      */
     setAuthenticationHeader(header) {
-        this.setAuthenticationHeaderBox(new core_1.AuthenticationHeaderBox(header));
-    }
-    setAuthenticationHeaderBox(headerBox) {
-        this._axios.defaults.headers.Authorization = headerBox.getData();
-        this._needs.onSetAuthenticationHeaderAsync?.(headerBox.getData());
+        (0, core_1.ExpectAuthenticationHeader)(header);
+        this._axios.defaults.headers.Authorization = header;
+        this._needs.onSetAuthenticationHeaderAsync?.(header);
     }
     clearAuthenticationCredentials() {
         delete this._axios.defaults.headers.Authorization;

@@ -1,5 +1,5 @@
 import Axios, { AxiosInstance } from "axios";
-import { AllHttpMethodsLowercase, AuthenticationHeaderBox, BasicCredentialsStringBox, UrlEndingInSlashBox } from "@layer92/core";
+import { AllHttpMethodsLowercase, BasicCredentialsStringToAuthenticationHeader, ExpectAuthenticationHeader, ExpectBasicCredentialsString, ExpectUrlEndingInSlash } from "@layer92/core";
 import { Expect } from "@layer92/core";
 export type OnAxiosHttpError = (statusCode:number,statusText:string,responseBodyData:any)=>(void|Promise<void>);
 
@@ -23,10 +23,10 @@ export class AxiosWebClient{
         onSetAuthenticationHeaderAsync?:(maybeHeader:string|undefined)=>void|Promise<void>,
     }){
         if(this._needs.baseUrl){
-            new UrlEndingInSlashBox(this._needs.baseUrl);
+            ExpectUrlEndingInSlash(this._needs.baseUrl);
         }
         if(this._needs.initialAuthenticationHeader){
-            new AuthenticationHeaderBox(this._needs.initialAuthenticationHeader);
+            ExpectAuthenticationHeader(this._needs.initialAuthenticationHeader);
             this.setAuthenticationHeader(this._needs.initialAuthenticationHeader)
         }
         this._axios = Axios.create({
@@ -186,8 +186,8 @@ export class AxiosWebClient{
     }
     
     setBearerToken(token:string){
-        const header = new AuthenticationHeaderBox("Bearer "+token);
-        this.setAuthenticationHeaderBox(header);
+        const header = ("Bearer "+token);
+        this.setAuthenticationHeader(header);
     }
 
     maybeGetBearerToken(){
@@ -207,22 +207,18 @@ export class AxiosWebClient{
      * @param basicCredentials a string in the form username:password
      */
     setBasicCredentialsString(basicCredentials:string){
-        this.setBasicCredentialsStringBox(new BasicCredentialsStringBox(basicCredentials));
-    }
-    private setBasicCredentialsStringBox(credentialsStringBox:BasicCredentialsStringBox){
-        const header = credentialsStringBox.toBasicAuthorizationHeader();
-        this.setAuthenticationHeaderBox(header);
+        ExpectBasicCredentialsString(basicCredentials);
+        const header = BasicCredentialsStringToAuthenticationHeader(basicCredentials);
+        this.setAuthenticationHeader(header);
     }
 
     /**
      * @param header A string in the form "Type value", eg "Basic username:password" or "Bearer foo". Despite going into the "Authorization" header of an HTTP request, this header is actually used for authentication, so that's what we're calling it.
      */
     setAuthenticationHeader(header:string){
-        this.setAuthenticationHeaderBox(new AuthenticationHeaderBox(header));
-    }
-    private setAuthenticationHeaderBox(headerBox:AuthenticationHeaderBox){
-        this._axios.defaults.headers.Authorization = headerBox.getData();
-        this._needs.onSetAuthenticationHeaderAsync?.(headerBox.getData());
+        ExpectAuthenticationHeader(header);
+        this._axios.defaults.headers.Authorization = header;
+        this._needs.onSetAuthenticationHeaderAsync?.(header);
     }
 
     clearAuthenticationCredentials(){
