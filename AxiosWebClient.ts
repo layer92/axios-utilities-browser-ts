@@ -25,13 +25,13 @@ export class AxiosWebClient{
         if(this._needs.baseUrl){
             ExpectUrlEndingInSlash(this._needs.baseUrl);
         }
+        this._axios = Axios.create({
+            baseURL:this._needs.baseUrl
+        });
         if(this._needs.initialAuthenticationHeader){
             ExpectAuthenticationHeader(this._needs.initialAuthenticationHeader);
             this.setAuthenticationHeader(this._needs.initialAuthenticationHeader)
         }
-        this._axios = Axios.create({
-            baseURL:this._needs.baseUrl
-        });
     }
 
     /**

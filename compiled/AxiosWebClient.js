@@ -10,13 +10,13 @@ class AxiosWebClient {
         if (this._needs.baseUrl) {
             (0, core_1.ExpectUrlEndingInSlash)(this._needs.baseUrl);
         }
+        this._axios = axios_1.default.create({
+            baseURL: this._needs.baseUrl
+        });
         if (this._needs.initialAuthenticationHeader) {
             (0, core_1.ExpectAuthenticationHeader)(this._needs.initialAuthenticationHeader);
             this.setAuthenticationHeader(this._needs.initialAuthenticationHeader);
         }
-        this._axios = axios_1.default.create({
-            baseURL: this._needs.baseUrl
-        });
     }
     /**
      * @returns the body data of the request
