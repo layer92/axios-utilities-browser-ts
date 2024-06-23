@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance } from "axios";
 import { AllHttpMethodsLowercase, BasicCredentialsStringToAuthenticationHeader, ExpectAuthenticationHeader, ExpectBasicCredentialsString, ExpectUrlEndingInSlash } from "@layer92/core";
 import { Expect } from "@layer92/core";
-export type OnAxiosHttpError = (statusCode:number,statusText:string,responseBodyData:any)=>(void|Promise<void>);
+export type OnAxiosHttpError = (data:{statusCode:number,statusText:string,responseBody:any})=>void|Promise<void>;
 
 type RequestArgumentsBeyondMethod = {
     pathOnHost:string,
@@ -99,10 +99,10 @@ export class AxiosWebClient{
             return axiosResult.data;
         }catch(axiosError:any){
             if( axiosError.response && axiosError.response.status){
-                const {status:statusCode,statusText,data:responseBodyData} = axiosError.response;
+                const {status:statusCode,statusText,data:responseBody} = axiosError.response;
                 const path = (this._needs.baseUrl||"")+pathOnHost;
-                onHttpError?.(statusCode,statusText,responseBodyData);
-                throw new Error("AxiosWebClient: AxiosError:\n"+JSON.stringify({path,method,statusCode,statusText,responseBodyData},null,4));
+                onHttpError?.({statusCode,statusText,responseBody});
+                throw new Error("AxiosWebClient: AxiosError:\n"+JSON.stringify({path,method,statusCode,statusText,responseBody},null,4));
             }
             throw axiosError;
         }
