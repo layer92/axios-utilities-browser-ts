@@ -1,5 +1,9 @@
 import { AxiosInstance } from "axios";
-export type OnAxiosHttpError = (statusCode: number, statusText: string, responseBodyData: any) => (void | Promise<void>);
+export type OnAxiosHttpError = (data: {
+    statusCode: number;
+    statusText: string;
+    responseBody: any;
+}) => void | Promise<void>;
 type RequestArgumentsBeyondMethod = {
     pathOnHost: string;
     body?: any;
