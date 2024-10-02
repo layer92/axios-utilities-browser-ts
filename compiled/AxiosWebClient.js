@@ -182,7 +182,7 @@ class AxiosWebClient {
      * @param basicCredentials a string in the form username:password
      */
     setBasicCredentialsString(basicCredentials) {
-        (0, core_1.ExpectBasicCredentialsString)(basicCredentials);
+        (0, core_1.ExpectBasicAccessCredentials)(basicCredentials);
         const header = (0, core_1.BasicCredentialsStringToAuthenticationHeader)(basicCredentials);
         this.setAuthenticationHeader(header);
     }

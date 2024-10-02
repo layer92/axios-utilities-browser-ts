@@ -1,5 +1,5 @@
 import Axios, { AxiosInstance } from "axios";
-import { AllHttpMethodsLowercase, BasicCredentialsStringToAuthenticationHeader, ExpectAuthenticationHeader, ExpectBasicCredentialsString, ExpectUrlEndingInSlash } from "@layer92/core";
+import { AllHttpMethodsLowercase, BasicCredentialsStringToAuthenticationHeader, ExpectAuthenticationHeader, ExpectBasicAccessCredentials, ExpectUrlEndingInSlash } from "@layer92/core";
 import { Expect } from "@layer92/core";
 export type OnAxiosHttpError = (data:{statusCode:number,statusText:string,responseBody:any})=>void|Promise<void>;
 
@@ -208,7 +208,7 @@ export class AxiosWebClient{
      * @param basicCredentials a string in the form username:password
      */
     setBasicCredentialsString(basicCredentials:string){
-        ExpectBasicCredentialsString(basicCredentials);
+        ExpectBasicAccessCredentials(basicCredentials);
         const header = BasicCredentialsStringToAuthenticationHeader(basicCredentials);
         this.setAuthenticationHeader(header);
     }
