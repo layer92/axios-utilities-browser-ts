@@ -41,7 +41,7 @@ class AxiosWebClient {
             }
         }
         let headers = {
-            ...this._axios.defaults.headers,
+            ...(this._axios.defaults?.headers || {}),
             ...(addHeaders || {})
         };
         const isFileRequest = body instanceof Blob;
