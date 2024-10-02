@@ -65,7 +65,7 @@ export class AxiosWebClient{
             }
         }
         let headers = {
-            ...(this._axios.defaults.headers as any),
+            ...(this._axios.defaults?.headers||{} as any),
             ...(addHeaders||{})
         };
         const isFileRequest = body instanceof Blob;
