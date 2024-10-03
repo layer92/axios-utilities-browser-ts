@@ -223,8 +223,11 @@ export class AxiosWebClient{
     }
 
     
+    clearHeader(key:string){
+        this.setHeader(key,undefined);
+    }
     // from axios: type AxiosHeaderValue = string | string[] | number | boolean | null;, but we're going to use just strings by choice
-    setHeader(key:string,value:string){
+    setHeader(key:string,value:string|undefined){
         this._axios.defaults.headers[key] = value;
     }
     maybeGetHeader(key:string):string{

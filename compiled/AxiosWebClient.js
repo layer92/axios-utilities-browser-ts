@@ -194,6 +194,9 @@ class AxiosWebClient {
         this._axios.defaults.headers.Authorization = header;
         this._needs.onSetAuthenticationHeaderAsync?.(header);
     }
+    clearHeader(key) {
+        this.setHeader(key, undefined);
+    }
     // from axios: type AxiosHeaderValue = string | string[] | number | boolean | null;, but we're going to use just strings by choice
     setHeader(key, value) {
         this._axios.defaults.headers[key] = value;
