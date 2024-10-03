@@ -222,6 +222,19 @@ export class AxiosWebClient{
         this._needs.onSetAuthenticationHeaderAsync?.(header);
     }
 
+    
+    // from axios: type AxiosHeaderValue = string | string[] | number | boolean | null;, but we're going to use just strings by choice
+    setHeader(key:string,value:string){
+        this._axios.defaults.headers[key] = value;
+    }
+    maybeGetHeader(key:string):string{
+        const value = this._axios.defaults.headers[key]
+        if(value===undefined){
+            return undefined;
+        }
+        return value.toString();
+    }
+
     clearAuthenticationCredentials(){
         delete this._axios.defaults.headers.Authorization;
         this._needs.onSetAuthenticationHeaderAsync?.(undefined);

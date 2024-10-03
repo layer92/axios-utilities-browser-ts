@@ -82,6 +82,8 @@ export declare class AxiosWebClient {
      * @param header A string in the form "Type value", eg "Basic username:password" or "Bearer foo". Despite going into the "Authorization" header of an HTTP request, this header is actually used for authentication, so that's what we're calling it.
      */
     setAuthenticationHeader(header: string): void;
+    setHeader(key: string, value: string): void;
+    maybeGetHeader(key: string): string;
     clearAuthenticationCredentials(): void;
     hasAuthenticationCredentials(): boolean;
 }
