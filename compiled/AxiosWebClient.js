@@ -53,7 +53,7 @@ class AxiosWebClient {
             headers[`Content-Type`] = `multipart/form-data`;
         }
         if (body instanceof FormData) {
-            for (const [key, value] of addFormDataEntries) {
+            for (const [key, value] of addFormDataEntries || []) {
                 body.append(key, value);
             }
             headers = {
