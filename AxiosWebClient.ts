@@ -11,6 +11,7 @@ type RequestArgumentsBeyondMethod = {
     },
     addFormDataEntries?:[string,any][],
     onHttpError?:OnAxiosHttpError,
+    verbose?:"request",
 };
 
 export class AxiosWebClient{
@@ -49,7 +50,6 @@ export class AxiosWebClient{
         verbose,
     }:{
         method:string,
-        verbose?:"request",
     }&RequestArgumentsBeyondMethod){
         if(pathOnHost.endsWith("/")){
             pathOnHost = pathOnHost.slice(0,-1);

@@ -12,6 +12,7 @@ type RequestArgumentsBeyondMethod = {
     };
     addFormDataEntries?: [string, any][];
     onHttpError?: OnAxiosHttpError;
+    verbose?: "request";
 };
 export declare class AxiosWebClient {
     private _needs;
@@ -29,7 +30,6 @@ export declare class AxiosWebClient {
      * */
     requestAsync({ method, pathOnHost, body, addHeaders, addFormDataEntries, onHttpError, verbose, }: {
         method: string;
-        verbose?: "request";
     } & RequestArgumentsBeyondMethod): Promise<any>;
     /**
      * @returns the body data of the request
