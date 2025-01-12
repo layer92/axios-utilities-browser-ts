@@ -46,7 +46,7 @@ class AxiosWebClient {
             ...(addHeaders || {})
         };
         const isFileRequest = body instanceof Blob;
-        if (isFileRequest && method === "post") {
+        if (isFileRequest && (method === "post" || method == "put")) {
             const formData = new FormData();
             formData.append(`file`, body);
             body = formData;
