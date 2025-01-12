@@ -46,8 +46,10 @@ export class AxiosWebClient{
         addHeaders,
         addFormDataEntries,
         onHttpError,
+        verbose,
     }:{
-        method:string
+        method:string,
+        verbose?:"request",
     }&RequestArgumentsBeyondMethod){
         if(pathOnHost.endsWith("/")){
             pathOnHost = pathOnHost.slice(0,-1);
@@ -91,11 +93,19 @@ export class AxiosWebClient{
             body.append(`file`,file);
         }
         try{
+            if(verbose==="request"){
+                console.log("AxiosWebClient.requestAsync:",{
+                    method,
+                    url: pathOnHost,
+                    headers,
+                    data: body,
+                });
+            }
             const axiosResult = await this._axios({
                 method,
                 url: pathOnHost,
-                data: body,
                 headers,
+                data: body,
             });
             return axiosResult.data;
         }catch(axiosError:any){

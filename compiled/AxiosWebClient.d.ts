@@ -27,8 +27,9 @@ export declare class AxiosWebClient {
      *
      * @param 0.body: you can provide a File (or Blob) as the body if you'd like to submit a file. If you're POSTing a file, the request body will become multi-part FormData
      * */
-    requestAsync({ method, pathOnHost, body, addHeaders, addFormDataEntries, onHttpError, }: {
+    requestAsync({ method, pathOnHost, body, addHeaders, addFormDataEntries, onHttpError, verbose, }: {
         method: string;
+        verbose?: "request";
     } & RequestArgumentsBeyondMethod): Promise<any>;
     /**
      * @returns the body data of the request

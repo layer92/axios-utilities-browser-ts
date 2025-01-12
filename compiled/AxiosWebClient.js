@@ -23,7 +23,7 @@ class AxiosWebClient {
      *
      * @param 0.body: you can provide a File (or Blob) as the body if you'd like to submit a file. If you're POSTing a file, the request body will become multi-part FormData
      * */
-    async requestAsync({ method, pathOnHost, body, addHeaders, addFormDataEntries, onHttpError, }) {
+    async requestAsync({ method, pathOnHost, body, addHeaders, addFormDataEntries, onHttpError, verbose, }) {
         if (pathOnHost.endsWith("/")) {
             pathOnHost = pathOnHost.slice(0, -1);
         }
@@ -67,11 +67,19 @@ class AxiosWebClient {
             body.append(`file`, file);
         }
         try {
+            if (verbose === "request") {
+                console.log("AxiosWebClient.requestAsync:", {
+                    method,
+                    url: pathOnHost,
+                    headers,
+                    data: body,
+                });
+            }
             const axiosResult = await this._axios({
                 method,
                 url: pathOnHost,
-                data: body,
                 headers,
+                data: body,
             });
             return axiosResult.data;
         }
